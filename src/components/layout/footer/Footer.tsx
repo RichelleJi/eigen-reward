@@ -27,10 +27,7 @@ export default function Footer() {
               >
                 Eigen Reward
               </NextLink>
-              <NavbarLink
-                href="https://github.com/richelleji"
-                target="_blank"
-              >
+              <NavbarLink href="https://github.com/richelleji" target="_blank">
                 <GitHubLogoIcon
                   width="24"
                   height="24"

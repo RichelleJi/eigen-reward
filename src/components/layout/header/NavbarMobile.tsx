@@ -48,10 +48,7 @@ export default function NavbarMobile() {
         <div>
           <ul className="mx-2 flex flex-col gap-4">
             <li className="flex">
-              <NavbarLink
-                href="https://github.com/richelleji"
-                target="_blank"
-              >
+              <NavbarLink href="https://github.com/richelleji" target="_blank">
                 <GitHubLogoIcon width="24" height="24" />
               </NavbarLink>
             </li>
@@ -74,8 +71,7 @@ export default function NavbarMobile() {
                         'inline-flex h-38 flex-grow flex-col items-start justify-start gap-6',
                         'mt-4 rounded-lg p-6 shadow backdrop-blur-2xl',
                       )}
-                    >
-                    </Content>
+                    ></Content>
                   </Item>
                 </List>
                 <Viewport className={clsx('flex flex-col justify-center')} />
