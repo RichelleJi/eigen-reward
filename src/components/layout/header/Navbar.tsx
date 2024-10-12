@@ -1,4 +1,5 @@
 import { ChevronDownIcon, GitHubLogoIcon } from '@radix-ui/react-icons';
+import '@rainbow-me/rainbowkit/styles.css';
 import {
   Content,
   Item,
@@ -9,8 +10,7 @@ import {
 } from '@radix-ui/react-navigation-menu';
 import { clsx } from 'clsx';
 import NextLink from 'next/link';
-import AccountConnect from './AccountConnect';
-
+import { ConnectButton } from '@rainbow-me/rainbowkit';
 export function NavbarLink({
   href,
   children,
@@ -70,10 +70,7 @@ function Navbar() {
         <div className="flex items-center justify-start gap-8">
           <ul className="hidden items-center justify-start gap-8 md:flex">
             <li className="flex">
-              <NavbarLink
-                href="https://github.com/richelleji"
-                target="_blank"
-              >
+              <NavbarLink href="https://github.com/richelleji" target="_blank">
                 <GitHubLogoIcon
                   width="24"
                   height="24"
@@ -85,14 +82,12 @@ function Navbar() {
               <Root className="relative">
                 <List className={clsx('flex flex-row space-x-2')}>
                   <Item>
-
                     <Content
                       className={clsx(
                         'inline-flex h-38 w-48 flex-col items-start justify-start gap-6',
                         'rounded-lg bg-neutral-900 p-6 shadow backdrop-blur-2xl',
                       )}
-                    >
-                    </Content>
+                    ></Content>
                   </Item>
                 </List>
                 <Viewport
@@ -104,7 +99,7 @@ function Navbar() {
               </Root>
             </li>
           </ul>
-          <AccountConnect />
+          <ConnectButton />;
         </div>
       </div>
     </nav>
