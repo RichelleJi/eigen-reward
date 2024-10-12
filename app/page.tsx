@@ -1,5 +1,5 @@
 import { generateMetadata } from '@/utils/generateMetadata';
-import RewardPage from './reward/page'
+import RewardPage from './reward/page';
 export const metadata = generateMetadata({
   title: 'Eigen Reward',
   description:
@@ -15,5 +15,5 @@ export const metadata = generateMetadata({
  * https://nextjs.org/docs/app/building-your-application/rendering/client-components
  */
 export default function Page() {
-  return <RewardPage/>;
+  return <RewardPage />;
 }
