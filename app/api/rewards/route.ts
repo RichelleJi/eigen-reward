@@ -35,7 +35,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     const etherBalance = ethers.utils.formatEther(balance);
 
     // Calculate EIGEN rewards (4 EIGEN for each ETH)
-    const eigenRewards = Math.floor(parseFloat(etherBalance) * 4);
+    const eigenRewards = Math.floor(parseFloat(etherBalance) * 4); //todo: call smart contract to mint this for the user
 
     return NextResponse.json({ eigenRewards }, { status: 200 });
   } catch (error) {

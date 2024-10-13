@@ -2,6 +2,7 @@ import { clsx } from 'clsx';
 import useOnchainCoffeeMemos from '../_hooks/useOnchainCoffeeMemos';
 import FormBuyCoffee from './FormBuyCoffee';
 import Memos from './Memos';
+import RewardTransaction from './RewardTransaction'; // Import the RewardTransaction component
 
 export default function RewardPage() {
   const { memos, refetchMemos } = useOnchainCoffeeMemos();
@@ -33,6 +34,16 @@ export default function RewardPage() {
           ])}
         >
           <FormBuyCoffee refetchMemos={refetchMemos} />
+        </div>
+      </aside>
+      <aside>
+        <div
+          className={clsx([
+            'mt-10 rounded-lg border border-boat-color-palette-line border-solid',
+            'bg-boat-color-palette-backgroundalternate p-10 md:mt-0',
+          ])}
+        >
+          <RewardTransaction />
         </div>
       </aside>
     </div>
