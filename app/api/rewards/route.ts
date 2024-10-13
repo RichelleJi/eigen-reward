@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { ethers } from 'ethers';
 
 type RewardsRequest = {
-  walletAddress: string;
+  address: string;
 };
 
 /**
@@ -20,9 +20,9 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     return createErrorResponse('Invalid JSON format', 400);
   }
 
-  const { walletAddress } = reqBody;
+  const { address } = reqBody;
 
-  if (!walletAddress) {
+  if (!address) {
     return createErrorResponse('Wallet address is required', 400);
   }
 
@@ -31,7 +31,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     const provider = new ethers.providers.getDefaultProvider();
 
     // Get the balance of the wallet in Ether
-    const balance = await provider.getBalance(walletAddress);
+    const balance = await provider.getBalance(address);
     const etherBalance = ethers.utils.formatEther(balance);
 
     // Calculate EIGEN rewards (4 EIGEN for each ETH)

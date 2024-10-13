@@ -3,12 +3,10 @@ import { useAccount } from 'wagmi';
 
 const RewardTransaction = () => {
   const { isConnected, address } = useAccount();
-  const [walletAddress, setWalletAddress] = useState(address || '');
   const [eigenRewards, setEigenRewards] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   const handleCalculateRewards = async () => {
-
     //todo: caldulate rewards ahead of time here
     try {
       const response = await fetch('/api/rewards', {
@@ -16,7 +14,7 @@ const RewardTransaction = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ walletAddress }),
+        body: JSON.stringify({ address }),
       });
 
       if (!response.ok) {
@@ -39,7 +37,7 @@ const RewardTransaction = () => {
       {isConnected ? (
         <div>
           <button onClick={handleCalculateRewards}>Calculate Rewards</button>
-          {error && <p style={{ color: 'red' }}>{error}</p>}
+          {error && <p style={{color: 'red'}}>{error}</p>}
           {eigenRewards !== null && (
             <p>Your EIGEN rewards: {eigenRewards}</p>
           )}
