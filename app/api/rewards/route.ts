@@ -1,5 +1,15 @@
 import { type NextRequest, NextResponse } from 'next/server';
-import { createWalletClient, http, getContract, publicClient,  createPublicClient} from 'viem';
+import { 
+  createWalletClient, 
+  http, 
+  publicActions, 
+  createPublicClient, 
+  type WalletClient, 
+  Account, 
+  WalletClientConfig, 
+  WriteContractReturnType,
+  GetBalanceReturnType
+} from 'viem';
 import { privateKeyToAccount } from 'viem/accounts';
 import { localhost } from 'viem/chains';
 import eigenABI from '../_contracts/eigenAbi';
@@ -8,87 +18,138 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 type RewardsRequest = {
-  address: string;
+  rewardAddress: string;
 };
 
-//todo: handle error bettter
-//todo: logging 
 const ONE_ETHER_IN_WEI = BigInt(10 ** 18);
+const REWARD_MULTIPLIER = BigInt(4);
 
 /**
- * POST function handles incoming POST requests for calculating EIGEN rewards.
+ * Handles incoming POST requests for calculating EIGEN rewards.
  *
- * @param {NextRequest} req - The incoming request object.
- * @returns {Promise<NextResponse>} - The response object containing the result or an error message.
+ * @param {NextRequest} req - The incoming request object containing the reward address.
+ * @returns {Promise<NextResponse>} - A promise that resolves to the response object containing the calculated EIGEN rewards or an error message.
+ * @throws {Error} - Throws an error if the request body is invalid or if the reward address is missing.
  */
 export async function POST(req: NextRequest): Promise<NextResponse> {
-  let reqBody: RewardsRequest;
+  const reqBody: RewardsRequest | null = await parseRequestBody(req);
+  if (!reqBody || !reqBody.rewardAddress) {
+    const errorMessage = !reqBody
+      ? 'The request body is not valid JSON. Please ensure you are sending a properly formatted JSON object.'
+      : 'The wallet address is required. Please provide a valid wallet address in the request.';
+    return createErrorResponse(errorMessage, 400);
+  }
+
+  const { rewardAddress } = reqBody;
 
   try {
-    reqBody = await req.json();
+    console.info(`[INFO] ${new Date().toISOString()} - Fetching balance for reward address: ${rewardAddress}`);
+    const balance:bigint = await getRewardAddressBalance(rewardAddress as `0x${string}`);
+    if (balance < ONE_ETHER_IN_WEI ) {
+      return createErrorResponse(`Not elgiable for rewards: ETH Balance below requirement`, 400);
+    }
+    const walletClient = await createLocalWalletClient(process.env.PRIVATE_KEY as `0x${string}`);
+    const eigenRewards = calculateEigenRewards(balance)
+    const txResponse = await simulateAndSendTransaction(walletClient, process.env.EIGEN_CONTRACT_ADDRESS as `0x${string}`, eigenRewards, rewardAddress);
+    
+    return NextResponse.json({ eigenRewards: eigenRewards.toString() }, { status: 200 });
+  } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : 'An unexpected error occurred while processing your request. Please try again later.';
+    console.error(`[ERROR] ${new Date().toISOString()} - Error processing POST request for wallet address ${rewardAddress}: ${errorMessage}`, {
+      rewardAddress,
+      stack: error instanceof Error ? error.stack : 'No stack trace available',
+    });
+    return createErrorResponse(`Failed to process the request for wallet address ${rewardAddress}.`, 500);
+  }
+}
+
+/**
+ * Parses the request body and returns the parsed object.
+ *
+ * @param {NextRequest} req - The incoming request object.
+ * @returns {Promise<RewardsRequest | null>} - A promise that resolves to the parsed request body or null if parsing fails.
+ * @throws {Error} - Throws an error if JSON parsing fails.
+ */
+async function parseRequestBody(req: NextRequest): Promise<RewardsRequest | null> {
+  try {
+    return await req.json();
   } catch {
-    return createErrorResponse('Invalid JSON format', 400);
+    throw new Error('Failed to parse request body');
   }
+}
 
-  const { address } = reqBody;
-
-  if (!address) {
-    return createErrorResponse('Wallet address is required', 400);
-  }
-
-    //check if there's more than 1 ether in the wallet
-  const oneEtherInWei = BigInt(10 ** 18);
-
+/**
+ * Retrieves the balance of the specified reward address.
+ *
+ * @param {`0x${string}`} rewardAddress - The Ethereum address for which to fetch the balance.
+ * @returns {Promise<bigint>} - A promise that resolves to the balance in wei.
+ * @throws {Error} - Throws an error if the balance cannot be fetched.
+ */
+async function getRewardAddressBalance(rewardAddress: `0x${string}`): Promise<GetBalanceReturnType> {
   const publicClient = createPublicClient({
     chain: localhost,
-    transport: http()
-  })
+    transport: http(),
+  });
+  return await publicClient.getBalance({ address: rewardAddress });
+}
 
-  const balance = await publicClient.getBalance({
-    address: address,
-  })
+/**
+ * Creates a wallet client using the provided private key.
+ *
+ * @param {`0x${string}`} privateKey - The private key used to create the wallet client.
+ * @returns {Promise<WalletClient>} - A promise that resolves to the wallet client instance.
+ * @throws {Error} - Throws an error if wallet client creation fails.
+ */
+async function createLocalWalletClient(privateKey: `0x${string}`): Promise<WalletClient> {
+  const account = privateKeyToAccount(privateKey) as Account;
 
   try {
-    const privateKey = process.env.PRIVATE_KEY;
-    const contractAddress = process.env.EIGEN_CONTRACT_ADDRESS;
-
-    if (!privateKey) {
-      return createErrorResponse('Private key is not defined in the environment', 500);
-    }
-
-    const account = privateKeyToAccount(privateKey);
-    const walletClient = createWalletClient({
+    const walletClientConfig: WalletClientConfig = {
       account,
       chain: localhost,
       transport: http(),
-    });
+    };
 
+    return createWalletClient(walletClientConfig).extend(publicActions);
+  } catch (error) {
+    // throw new Error(`Failed to create wallet client: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    throw error
+  }
+}
 
-    const contract = getContract({
-      address: contractAddress,
-      abi: eigenABI,
-      client: { wallet: walletClient },
-    });
+/**
+ * Calculates the EIGEN rewards based on the balance.
+ *
+ * @param {bigint} balance - The balance in wei.
+ * @returns {bigint} - The calculated EIGEN rewards.
+ */
+function calculateEigenRewards(balance: bigint): bigint {
 
-    // Calculate EIGEN rewards (4 EIGEN for each token)
-    const eigenRewards = (balance * BigInt(4)); //it returned40002
+  return balance * REWARD_MULTIPLIER;
+}
 
-    // Simulate the contract call to mint rewards
-    const { request } = await publicClient.simulateContract({
+/**
+ * Simulates the contract call to mint rewards and sends the transaction.
+ *
+ * @param {WalletClient} walletClient - The wallet client instance.
+ * @param {`0x${string}`} contractAddress - The address of the contract.
+ * @param {bigint} eigenRewards - The amount of EIGEN rewards to claim.
+ * @param {string} rewardAddress - The address to receive the rewards.
+ * @returns {Promise<WriteContractReturnType>} - A promise that resolves to the result of the transaction.
+ * @throws {Error} - Throws an error if the transaction simulation or sending fails.
+ */
+async function simulateAndSendTransaction(walletClient: WalletClient, contractAddress: `0x${string}`, eigenRewards: bigint, rewardAddress: string): Promise<WriteContractReturnType> {
+  try {
+    const { request } = await walletClient.simulateContract({
       address: contractAddress,
       abi: eigenABI,
       functionName: 'claimReward',
-      args: [eigenRewards], 
-      account,
+      args: [eigenRewards, rewardAddress],
     });
 
-    const tx = await walletClient.writeContract(request);
-    //todo: listen to transaction, to wait or to pull on the frontend
-
-    return NextResponse.json({ eigenRewards: eigenRewards.toString() }, { status: 200 });
+    return await walletClient.writeContract(request); // Ensure a return value
   } catch (error) {
-    console.error('Error fetching balance or calling contract:', error);
-    return createErrorResponse('Internal Server Error', 500);
+    throw new Error(`Transaction simulation or sending failed for wallet address ${rewardAddress}. Please try again later.`);
   }
 }
 
@@ -102,3 +163,4 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 function createErrorResponse(message: string, status: number): NextResponse {
   return NextResponse.json({ error: message }, { status });
 }
+
