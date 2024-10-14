@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import { useAccount, useBalance } from 'wagmi';
+import { useState } from 'react';
+import { useAccount } from 'wagmi';
 import { formatUnits } from 'viem';
 import { useCheckEligibilityForReward } from '../hooks/useCheckEligibilityForReward'; // Import the hook
 
@@ -68,9 +68,14 @@ const RewardTransaction = () => {
                 claim
               </button>
               {error && <p className="text-red-500">{error}</p>}
+              {eigenRewards && (
+                <p className="text-green-500">
+                  You got {formatUnits(eigenRewards, 18)}EG!
+                </p>
+              )}
             </>
           ) : (
-            <p className="text-red-500">{ERROR_MESSAGES.notEligible}</p> // Show not eligible message
+            <p className="text-red-500">{ERROR_MESSAGES.notEligible}</p>
           )}
         </div>
       ) : (
