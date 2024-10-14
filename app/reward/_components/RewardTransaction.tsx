@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useAccount } from 'wagmi';
 import { formatUnits } from 'viem';
-import { useCheckEligibilityForReward } from '../hooks/useCheckEligibilityForReward'; // Import the hook
+import { useCheckEligibilityForReward } from '../_hooks/useCheckEligibilityForReward'; // Import the hook
 
 // Define types for the response data
 interface RewardResponse {
