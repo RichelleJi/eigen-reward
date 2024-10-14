@@ -3,7 +3,7 @@
   "scripts": {
     "compile": "./node_modules/.bin/hardhat compile",
     "deploy": "./node_modules/.bin/hardhat run script/deployEigen.js --network localhost",
-    "node":  "./node_modules/.bin/hardhat node"
+    "node": "./node_modules/.bin/hardhat node"
   },
   "devDependencies": {
     "@nomiclabs/hardhat-ethers": "^2.0.5",
