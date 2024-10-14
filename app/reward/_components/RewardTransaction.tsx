@@ -13,7 +13,7 @@ const ERROR_MESSAGES = {
   notEligible: 'You need at least 1 ETH to be eligible for the reward.',
 };
 
-const ONE_ETHER_IN_WEI = BigInt(10 ** 18);
+const _ONE_ETHER_IN_WEI = BigInt(10 ** 18);
 
 const RewardTransaction = () => {
   const { isConnected, address } = useAccount();
@@ -64,7 +64,7 @@ const RewardTransaction = () => {
           {isEligible ? (
             <>
               <button
-                className="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-full text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700"
+                className="me-2 mb-2 rounded-full bg-gray-800 px-5 py-2.5 font-medium text-sm text-white hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:focus:ring-gray-700 dark:hover:bg-gray-700"
                 onClick={handleClaimReward}
               >
                 claim

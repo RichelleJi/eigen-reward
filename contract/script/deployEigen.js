@@ -16,7 +16,10 @@ async function main() {
   if (fs.existsSync(envFilePath)) {
     let envFileContent = fs.readFileSync(envFilePath, 'utf8');
     if (envFileContent.includes('NEXT_PUBLIC_EIGEN_CONTRACT_ADDRESS=')) {
-      envFileContent = envFileContent.replace(/NEXT_PUBLIC_EIGEN_CONTRACT_ADDRESS=.*/g, addressLine);
+      envFileContent = envFileContent.replace(
+        /NEXT_PUBLIC_EIGEN_CONTRACT_ADDRESS=.*/g,
+        addressLine,
+      );
     } else {
       envFileContent += addressLine;
     }
