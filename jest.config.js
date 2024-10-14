@@ -11,7 +11,6 @@ const customJestConfig = {
   },
   roots: [
     '<rootDir>/src',
-    '<rootDir>/app/api/paymaster-proxy',
     '<rootDir>/app/api/rewards',
   ],
   setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
