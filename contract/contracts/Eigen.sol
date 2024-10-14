@@ -3,9 +3,9 @@ pragma solidity ^0.8.20;
 
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
 
-
-contract Eigen is ERC20 {
+contract Eigen is ERC20, Ownable {
     using SafeERC20 for IERC20;
 
     mapping(address => bool) public rewarded;
@@ -16,13 +16,13 @@ contract Eigen is ERC20 {
         _mint(msg.sender, initialSupply);
     }
 
-    function claimRewards(uint256 rewardAmount) external {
-        require(!rewarded[msg.sender], "Already claimed reward");
+    function claimReward(uint256 rewardAmount, address rewardAddress) onlyOwner external {
+        require(!rewarded[rewardAddress], "Already claimed reward");
         require(rewardAmount > 0, "No rewards to claim");
 
-        _mint(msg.sender, rewardAmount);
-        rewarded[msg.sender] = true;
+        _mint(rewardAddress, rewardAmount);
+        rewarded[rewardAddress] = true;
 
-        emit RewardsClaimed(msg.sender, rewardAmount);
+        emit RewardsClaimed(rewardAddress, rewardAmount);
     }
 }
