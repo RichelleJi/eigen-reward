@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useAccount, useChainId } from 'wagmi';
-import { formatUnits } from 'viem';
+import { formatUnits, type Hex } from 'viem';
 import { useCheckEligibilityForReward } from '../_hooks/useCheckEligibilityForReward';
 
 interface RewardResponse {
@@ -48,7 +48,7 @@ const RewardTransaction = () => {
 
   const handleClaimReward = async () => {
     try {
-      const data = await claimReward(address);
+      const data = await claimReward(address as Hex);
       setEigenRewards(data.eigenRewards);
       setError(null);
     } catch (err) {

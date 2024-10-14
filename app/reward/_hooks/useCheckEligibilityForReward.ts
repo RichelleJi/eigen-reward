@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react';
 import { useBalance } from 'wagmi';
+import type { Hex } from 'viem';
 
 const ONE_ETHER_IN_WEI = BigInt(10 ** 18);
 
-export const useCheckEligibilityForReward = (address?: string) => {
+export const useCheckEligibilityForReward = (address?: Hex) => {
   const { data: ethBalance } = useBalance({
     address: address,
-    watch: true,
   });
 
   const [isEligible, setIsEligible] = useState<boolean | null>(null);

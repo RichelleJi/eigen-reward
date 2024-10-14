@@ -11,7 +11,6 @@ export default function BalanceDisplay() {
     error: ethBalanceError,
   } = useBalance({
     address: address,
-    watch: true,
   });
   const {
     data: egBalance,

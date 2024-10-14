@@ -1,10 +1,10 @@
 import { type NextRequest, NextResponse } from 'next/server';
-import { type WalletClient, type WriteContractReturnType } from 'viem';
+import type { WalletClient, Hex, WriteContractReturnType } from 'viem';
 import eigenABI from '../../contracts/eigenAbi';
 import createViemClient from '@/walletClient';
 
 type RewardsRequest = {
-  rewardAddress: string;
+  rewardAddress: Hex;
   chainId: number;
 };
 
