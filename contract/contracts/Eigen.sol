@@ -1,74 +1,29 @@
-// SPDX-License-Identifier: MIT
-pragma solidity ^0.8.4;
+// SPDX-License-Identifier: GPL-3.0-or-later
+pragma solidity =0.8.17;
 
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
-import "hardhat/console.sol";
+import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
+
 
 contract Eigen is ERC20 {
-    mapping(address => bool) rewarded
+    using SafeERC20 for IERC20;
+
+    mapping(address => bool) public rewarded;
+    event RewardsClaimed(address indexed user, uint256 amount);
 
     constructor(uint256 initialSupply) ERC20("Eigen", "EG") {
+        require(initialSupply > 0, "Initial supply must be greater than zero");
         _mint(msg.sender, initialSupply);
     }
 
+    function claimRewards(uint256 rewardAmount) external {
+        require(!rewarded[msg.sender], "Already claimed reward");
+        require(rewardAmount > 0, "No rewards to claim");
 
-    function reward(uint256 amount) external {
-        require(!claimed[msg.sender], "Already claimed air drop");
-        claimed[msg.sender] = true;
+        // Mint EIGEN tokens equal to the calculated reward amount
         _mint(msg.sender, rewardAmount);
+        rewarded[msg.sender] = true;
+
+        emit RewardsClaimed(msg.sender, rewardAmount);
     }
 }
-
-
-//
-//
-//// SPDX-License-Identifier: MIT
-//pragma solidity ^0.8.0;
-//
-//import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
-//import "@openzeppelin/contracts/access/Ownable.sol";
-//import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
-//
-//interface IEigenToken {
-//    function mint(address to, uint256 amount) external;
-//}
-//
-//contract EigenRewardClaim is Ownable, ReentrancyGuard {
-//    IEigenToken public eigenToken;
-//
-//    // Mapping to track whether a wallet has claimed rewards
-//    mapping(address => bool) public hasClaimed;
-//
-//    // Event emitted when a user claims their rewards
-//    event RewardsClaimed(address indexed user, uint256 amount);
-//
-//    // Constructor to set the EIGEN token contract
-//    constructor(address _eigenTokenAddress) {
-//        eigenToken = IEigenToken(_eigenTokenAddress);
-//    }
-//
-//    // Claim rewards function: The frontend/backend passes the precomputed reward amount for the user
-//    function claimRewards(uint256 precomputedRewards) external nonReentrant {
-//        require(!hasClaimed[msg.sender], "Already claimed rewards");
-//        require(precomputedRewards > 0, "No rewards to claim");
-//
-//        // Mint the precomputed EIGEN tokens to the user
-//        eigenToken.mint(msg.sender, precomputedRewards);
-//
-//        // Mark the user as having claimed their rewards
-//        hasClaimed[msg.sender] = true;
-//
-//        // Emit an event for the claim
-//        emit RewardsClaimed(msg.sender, precomputedRewards);
-//    }
-//
-//    // Admin function to reset claim status (for testing or future updates)
-//    function resetClaim(address user) external onlyOwner {
-//        hasClaimed[user] = false;
-//    }
-//
-//    // Admin function to update the EIGEN token contract address
-//    function setEigenTokenAddress(address _eigenTokenAddress) external onlyOwner {
-//        eigenToken = IEigenToken(_eigenTokenAddress);
-//    }
-//}
