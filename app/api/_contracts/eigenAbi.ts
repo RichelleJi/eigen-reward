@@ -155,7 +155,7 @@ const eigenABI = [
         type: 'uint256',
       },
     ],
-    name: 'claimRewards',
+    name: 'claimReward',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',
