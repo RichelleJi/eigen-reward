@@ -13,8 +13,6 @@ const ERROR_MESSAGES = {
   notEligible: 'You need at least 1 ETH to be eligible for the reward.',
 };
 
-const _ONE_ETHER_IN_WEI = BigInt(10 ** 18);
-
 const RewardTransaction = () => {
   const { isConnected, address } = useAccount();
   const [eigenRewards, setEigenRewards] = useState<number | null>(null);
