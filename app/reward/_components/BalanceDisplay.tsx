@@ -19,7 +19,7 @@ export default function BalanceDisplay() {
     error: egBalanceError,
   } = useReadContract({
     abi: eigenABI,
-    address: process.env.NEXT_PUBLIC_EIGEN_CONTRACT_ADDRES as `0x${string}`,
+    address: process.env.NEXT_PUBLIC_EIGEN_CONTRACT_ADDRESS as `0x${string}`,
     functionName: 'balanceOf',
     args: [address],
     query: {
@@ -48,9 +48,7 @@ export default function BalanceDisplay() {
           <p>
             {' '}
             ETH:{' '}
-            {ethBalance
-              ? formatUnits(ethBalance.value, 18)
-              : 'No balance data available'}
+            {ethBalance ? formatUnits(ethBalance.value, 18) : 'Unavailable'}
           </p>
         )}
       </div>
@@ -58,13 +56,7 @@ export default function BalanceDisplay() {
         {isLoadingEgBalance ? (
           <p>Loading eigen balance...</p>
         ) : (
-          <p>
-            {' '}
-            EG:{' '}
-            {egBalance
-              ? formatUnits(egBalance, 18)
-              : 'No eigen balance data available'}
-          </p>
+          <p> EG: {egBalance ? formatUnits(egBalance, 18) : 'Unavailable'}</p>
         )}
       </div>
     </div>
