@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useAccount } from 'wagmi';
+import { useAccount, useChainId } from 'wagmi';
 import { formatUnits } from 'viem';
 import { useCheckEligibilityForReward } from '../_hooks/useCheckEligibilityForReward';
 
@@ -20,6 +20,7 @@ const RewardTransaction = () => {
   const [eigenRewards, setEigenRewards] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
   const { isEligible } = useCheckEligibilityForReward(address);
+  const chainId = useChainId();
 
   useEffect(() => {
     setEigenRewards(null);
@@ -34,7 +35,7 @@ const RewardTransaction = () => {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ rewardAddress }),
+      body: JSON.stringify({ rewardAddress, chainId }),
     });
 
     if (!response.ok) {
