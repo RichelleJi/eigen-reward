@@ -1,8 +1,8 @@
 import chai, { expect } from 'chai'
 import { solidity } from 'ethereum-waffle'
-import { BigNumber, Contract, ContractFactory, BigNumberish} from 'ethers'
+import { BigNumber, Contract, ContractFactory } from 'ethers'
 import { ethers } from 'hardhat'
-import {SignerWithAddress} from "@nomiclabs/hardhat-ethers/signers";
+import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 
 chai.use(solidity)
 
@@ -20,12 +20,12 @@ describe('Eigen tests', () => {
 
   beforeEach(async () => {
     wallets = await ethers.getSigners()
-    wallet0 = wallets[0]
-    wallet1 = wallets[1]
-    wallet2 = wallets[2]
+    wallet0 = wallets[0] // Owner
+    wallet1 = wallets[1] // User 1
+    wallet2 = wallets[2] // User 2
     const eigenFactory = await ethers.getContractFactory('Eigen', wallet0)
     eigen = await eigenFactory.deploy(BigNumber.from(1000), overrides) // Initial supply of 1000
-    rewardAmount = ethers.utils.parseUnits("1", 18);
+    rewardAmount = ethers.utils.parseUnits("1", 18); // Reward amount of 1 token
   })
 
   describe('#constructor', () => {
@@ -41,33 +41,31 @@ describe('Eigen tests', () => {
   })
 
   describe('#claimReward', () => {
-    it("should allow a user to claim rewards", async function () {
+    it("should allow the owner to claim rewards for a user", async function () {
       await expect(eigen.connect(wallet0).claimReward(rewardAmount, wallet1.address))
-      .to.emit(eigen, 'RewardsClaimed')
-      .withArgs(wallet1.address, rewardAmount)
+        .to.emit(eigen, 'RewardsClaimed')
+        .withArgs(wallet1.address, rewardAmount)
 
       expect(await eigen.balanceOf(wallet1.address)).to.eq(rewardAmount)
       expect(await eigen.rewarded(wallet1.address)).to.be.true
     })
 
     it('should revert if rewards have already been claimed', async () => {
-        await eigen.connect(wallet0).claimReward(rewardAmount,  wallet0.address);
+      await eigen.connect(wallet0).claimReward(rewardAmount, wallet0.address); // Owner claims for themselves
 
-        await expect(eigen.connect(wallet0).claimReward(rewardAmount, wallet0.address)).to.be.revertedWith('Already claimed reward')
+      await expect(eigen.connect(wallet0).claimReward(rewardAmount, wallet0.address)).to.be.revertedWith('Already claimed reward')
     })
 
-    it('should revert if rewards is zero', async () => {
-        const rewardAmount = BigNumber.from(0);
-        const rewardAddress = wallet0.address;
-
-        await expect(eigen.connect(wallet0).claimReward(rewardAmount, rewardAddress)).to.be.revertedWith('No rewards to claim')
+    it('should revert if rewards amount is zero', async () => {
+      const zeroRewardAmount = BigNumber.from(0);
+      await expect(eigen.connect(wallet0).claimReward(zeroRewardAmount, wallet0.address)).to.be.revertedWith('No rewards to claim')
     })
 
-    it('should not allow a user to claim rewards if they are not the owner', async () => {
+    it('should revert if a non-owner tries to claim rewards', async () => {
       await expect(eigen.connect(wallet1).claimReward(rewardAmount, wallet1.address)).to.be.revertedWith('Ownable: caller is not the owner');
     });
 
-    it('should allow multiple users to claim rewards independently', async () => {
+    it('should allow the owner to claim rewards for multiple users independently', async () => {
       await eigen.connect(wallet0).claimReward(rewardAmount, wallet1.address);
       await eigen.connect(wallet0).claimReward(rewardAmount, wallet2.address);
 
