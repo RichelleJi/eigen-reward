@@ -48,16 +48,22 @@ project-root
 2. **Import Wallet**: Import from any of the following accounts outputted on Hardhat server log.
     ![img_1.png](img_1.png)
 
-### Running fullstack app  
+### Running the NextJs app  
+1. **Save a private key**: in the .env file from one of the addresses in the hardhat server output: 
+```bash
+NEXT_PRIVATE_WAlLLET_PRIVATE_KEY=<output above>
+``` 
 1.**Install Dependencies**: 
-   ```bash
-   yarn 
-   ```
+```bash
+yarn 
+```
 
-2.**Start the Backend**: 
+2.**Start the app**: 
    ```bash
    yarn dev 
    ```
+
+
 
 
 ## License
