@@ -13,7 +13,6 @@ import {
 } from '@radix-ui/react-navigation-menu';
 import { clsx } from 'clsx';
 import { useCallback, useState } from 'react';
-import AccountConnect from './AccountConnect';
 import { NavbarLink, NavbarTitle } from './Navbar';
 
 export default function NavbarMobile() {
@@ -72,9 +71,6 @@ export default function NavbarMobile() {
               </Root>
             </li>
           </ul>
-          <div className="mx-2 mt-4">
-            <AccountConnect />
-          </div>
         </div>
       </nav>
     );

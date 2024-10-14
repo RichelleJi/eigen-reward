@@ -7,7 +7,7 @@ jest.mock('viem', () => ({
   createWalletClient: jest.fn(),
   publicActions: {},
   privateKeyToAccount: jest.fn(),
-  http: jest.fn(), // Mock http transport
+  http: jest.fn(),
 }));
 
 describe('POST route handler', () => {

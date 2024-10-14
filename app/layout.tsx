@@ -1,8 +1,6 @@
 import './global.css';
-
 import OnchainProviders from '@/OnchainProviders';
-import GoogleAnalytics from '@/components/GoogleAnalytics/GoogleAnalytics';
-import { initAnalytics } from '@/utils/analytics';
+
 import type { Metadata } from 'next';
 import { inter } from './fonts';
 
@@ -20,7 +18,6 @@ export const metadata: Metadata = {
 
 // Stat analytics before the App renders,
 // so we can track page views and early events
-initAnalytics();
 
 /** Root layout to define the structure of every page
  * https://nextjs.org/docs/app/building-your-application/routing/pages-and-layouts
@@ -33,7 +30,6 @@ export default function RootLayout({
       <body className="flex flex-1 flex-col">
         <OnchainProviders>{children}</OnchainProviders>
       </body>
-      <GoogleAnalytics />
     </html>
   );
 }
