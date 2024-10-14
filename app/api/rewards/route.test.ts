@@ -30,7 +30,7 @@ describe('POST route handler', () => {
   };
 
   beforeEach(() => {
-    process.env.NEXT_PRIVATE_WAlLLET_PRIVATE_KE = privateKey;
+    process.env.NEXT_PRIVATE_WAlLLET_PRIVATE_KEY = privateKey;
     process.env.NEXT_PUBLIC_EIGEN_CONTRACT_ADDRESS = '0xContractAddress';
 
     (createWalletClient as jest.Mock).mockReturnValue({

@@ -56,7 +56,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
       );
     }
     const walletClient = await createLocalWalletClient(
-      process.env.NEXT_PRIVATE_WAlLLET_PRIVATE_KE as `0x${string}`,
+      process.env.NEXT_PRIVATE_WAlLLET_PRIVATE_KEY as `0x${string}`,
     );
     const eigenRewards = calculateEigenRewards(balance);
     const _txResponse = await simulateAndSendTransaction(
