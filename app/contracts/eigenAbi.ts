@@ -1,4 +1,5 @@
-// Eigen.ts
+import { type Abi } from 'abitype';
+
 const eigenABI = [
   {
     inputs: [
@@ -389,6 +390,6 @@ const eigenABI = [
     stateMutability: 'nonpayable',
     type: 'function',
   },
-];
+] as Abi;
 
 export default eigenABI;
