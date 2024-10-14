@@ -35,7 +35,7 @@ export default function BalanceDisplay() {
     if (egBalanceError) {
       console.error('Error fetching eigen balance:', egBalanceError);
     }
-  });
+  }, [ethBalance, egBalance, address]);
 
   return (
     <div>

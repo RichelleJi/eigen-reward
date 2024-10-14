@@ -1,14 +1,12 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useAccount } from 'wagmi';
 import { formatUnits } from 'viem';
-import { useCheckEligibilityForReward } from '../_hooks/useCheckEligibilityForReward'; // Import the hook
+import { useCheckEligibilityForReward } from '../_hooks/useCheckEligibilityForReward';
 
-// Define types for the response data
 interface RewardResponse {
   eigenRewards: number;
 }
 
-// Constants for messages
 const ERROR_MESSAGES = {
   fetchError: 'Failed to fetch rewards. Please try again.',
   walletNotConnected: 'Please connect your wallet to claim rewards.',
@@ -21,9 +19,13 @@ const RewardTransaction = () => {
   const { isConnected, address } = useAccount();
   const [eigenRewards, setEigenRewards] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const { isEligible } = useCheckEligibilityForReward(address); // Use the hook
+  const { isEligible } = useCheckEligibilityForReward(address);
 
-  // Function to fetch rewards from the API
+  useEffect(() => {
+    setEigenRewards(null);
+    setError(null);
+  }, [address]);
+
   const claimReward = async (
     rewardAddress: string,
   ): Promise<RewardResponse> => {
