@@ -1,4 +1,3 @@
-import { GitHubLogoIcon } from '@radix-ui/react-icons';
 import '@rainbow-me/rainbowkit/styles.css';
 import {
   Content,
@@ -68,15 +67,6 @@ function Navbar() {
         <NavbarTitle />
         <div className="flex items-center justify-start gap-8">
           <ul className="hidden items-center justify-start gap-8 md:flex">
-            <li className="flex">
-              <NavbarLink href="https://github.com/richelleji" target="_blank">
-                <GitHubLogoIcon
-                  width="24"
-                  height="24"
-                  aria-label="build-onchain-apps Github respository"
-                />
-              </NavbarLink>
-            </li>
             <li className="flex">
               <Root className="relative">
                 <List className={clsx('flex flex-row space-x-2')}>
