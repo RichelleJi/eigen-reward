@@ -38,10 +38,10 @@ project-root
 ### Set Up Wallet
 1. **Set Up Network on Wallet**: Ensure your wallet (e.g., MetaMask) is set up to connect to the appropriate network.
     
-     <img src="public/doc/img.pngdoc/img.png" alt="Description" width="200" height="400">
+     <img src="public/doc/img.png" alt="Description" width="200" height="400">
 
 2. **Import Wallet**: Import from any of the following accounts outputted on the Hardhat server log.
-    <img src="public/doc/img.pngdoc/img_1.png" alt="Description" width="400" height="400">
+    <img src="public/doc/img_1.png" alt="Description" width="400" height="400">
 
 ### Running the Next.js App
 1. **Install Dependencies**: In the root directory 
