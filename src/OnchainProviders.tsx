@@ -4,7 +4,6 @@ import type { ReactNode } from 'react';
 import { WagmiProvider, createConfig, http } from 'wagmi';
 import { RainbowKitProvider } from '@rainbow-me/rainbowkit';
 import { mainnet, sepolia, localhost } from 'wagmi/chains';
-import '@coinbase/onchainkit/styles.css';
 
 type Props = { children: ReactNode };
 
@@ -23,9 +22,7 @@ function OnchainProviders({ children }: Props) {
   return (
     <WagmiProvider config={config}>
       <QueryClientProvider client={queryClient}>
-        {/*<OnchainKitProvider chain={localhost}>*/}
         <RainbowKitProvider modalSize="compact">{children}</RainbowKitProvider>
-        {/*</OnchainKitProvider>*/}
       </QueryClientProvider>
     </WagmiProvider>
   );
