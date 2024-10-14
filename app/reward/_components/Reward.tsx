@@ -1,3 +1,4 @@
+import React, { useEffect, useState } from 'react';
 import { clsx } from 'clsx';
 import RewardTransaction from './RewardTransaction'; // Import the RewardTransaction component
 import { useAccount, useBalance } from 'wagmi';
