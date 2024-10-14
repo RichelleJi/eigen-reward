@@ -42,6 +42,25 @@ const eigenABI = [
       {
         indexed: true,
         internalType: 'address',
+        name: 'previousOwner',
+        type: 'address',
+      },
+      {
+        indexed: true,
+        internalType: 'address',
+        name: 'newOwner',
+        type: 'address',
+      },
+    ],
+    name: 'OwnershipTransferred',
+    type: 'event',
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: 'address',
         name: 'user',
         type: 'address',
       },
@@ -154,6 +173,11 @@ const eigenABI = [
         name: 'rewardAmount',
         type: 'uint256',
       },
+      {
+        internalType: 'address',
+        name: 'rewardAddress',
+        type: 'address',
+      },
     ],
     name: 'claimReward',
     outputs: [],
@@ -232,6 +256,26 @@ const eigenABI = [
       },
     ],
     stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'owner',
+    outputs: [
+      {
+        internalType: 'address',
+        name: '',
+        type: 'address',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'renounceOwnership',
+    outputs: [],
+    stateMutability: 'nonpayable',
     type: 'function',
   },
   {
@@ -329,6 +373,19 @@ const eigenABI = [
         type: 'bool',
       },
     ],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address',
+        name: 'newOwner',
+        type: 'address',
+      },
+    ],
+    name: 'transferOwnership',
+    outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',
   },
