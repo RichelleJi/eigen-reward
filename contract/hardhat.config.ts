@@ -14,8 +14,7 @@ const config: HardhatUserConfig = {
       chainId: 1337,
     },
     sepolia: {
-      url: `https://eth-sepolia.g.alchemy.com/v2/${NEXT_PRIVATE_ALCHEMY_PRIVATE_KEY}`,
-      accounts: [NEXT_PRIVATE_WAlLLET_PRIVATE_KEY],
+      url: `https://eth-sepolia.g.alchemy.com/v2/${NEXT_PRIVATE_ALCHEMY_PRIVATE_KEY ?? ''}`,
     },
   },
 };
