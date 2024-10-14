@@ -9,7 +9,7 @@ async function main() {
   await eigen.deployed();
   console.log(`Eigen deployed at ${eigen.address}`);
 
-  const envFilePath = '../.env.local';
+  const envFilePath = '../.env';
   const addressLine = `NEXT_PUBLIC_EIGEN_CONTRACT_ADDRESS=${eigen.address}\n`;
   
 
