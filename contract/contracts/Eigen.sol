@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
-pragma solidity =0.8.17;
+pragma solidity ^0.8.20;
 
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
@@ -20,7 +20,6 @@ contract Eigen is ERC20 {
         require(!rewarded[msg.sender], "Already claimed reward");
         require(rewardAmount > 0, "No rewards to claim");
 
-        // Mint EIGEN tokens equal to the calculated reward amount
         _mint(msg.sender, rewardAmount);
         rewarded[msg.sender] = true;
 
