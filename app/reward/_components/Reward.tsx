@@ -1,15 +1,8 @@
-import React, { useEffect, useState } from 'react';
 import { clsx } from 'clsx';
-import RewardTransaction from './RewardTransaction'; // Import the RewardTransaction component
-import { useAccount, useBalance } from 'wagmi';
+import RewardTransaction from './RewardTransaction';
+import BalanceDisplay from './BalanceDisplay';
 
 export default function RewardPage() {
-  const { address, isConnected } = useAccount();
-  const { data: balanceData, isLoading: isLoadingBalance } = useBalance({
-    address: address,
-    watch: true, // Automatically update the balance when it changes
-  });
-
   return (
     <div
       className={clsx([
@@ -33,14 +26,7 @@ export default function RewardPage() {
           'bg-boat-color-palette-backgroundalternate p-10 md:mt-0',
         ])}
       >
-        <h2 className="mb-5 w-fit font-semibold text-2xl text-white">
-          Your Ethereum Balance
-        </h2>
-        {isLoadingBalance ? (
-          <p>Loading balance...</p>
-        ) : (
-          <p>Your balance: {balanceData?.formatted} ETH</p>
-        )}
+        <BalanceDisplay />
       </section>
     </div>
   );
