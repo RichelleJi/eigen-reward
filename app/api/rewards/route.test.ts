@@ -1,6 +1,6 @@
 import { POST } from './route';
-import { NextRequest } from 'next/server';
-import { ethers } from "ethers";
+import type { NextRequest } from 'next/server';
+import { ethers } from 'ethers';
 
 jest.mock('ethers', () => ({
   ethers: {
@@ -22,7 +22,9 @@ describe('POST function', () => {
     const mockProvider = {
       getBalance: jest.fn().mockResolvedValue('1000000000000000000'), // 1 ETH in wei
     };
-    (ethers.providers.getDefaultProvider as jest.Mock).mockReturnValue(mockProvider);
+    (ethers.providers.getDefaultProvider as jest.Mock).mockReturnValue(
+      mockProvider,
+    );
     (ethers.utils.formatEther as jest.Mock).mockReturnValue('1.0'); // 1 ETH
 
     const req = {
@@ -54,7 +56,9 @@ describe('POST function', () => {
     const mockProvider = {
       getBalance: jest.fn().mockRejectedValue(new Error('Network error')),
     };
-    (ethers.providers.getDefaultProvider as jest.Mock).mockReturnValue(mockProvider);
+    (ethers.providers.getDefaultProvider as jest.Mock).mockReturnValue(
+      mockProvider,
+    );
 
     const req = {
       json: jest.fn().mockResolvedValue({

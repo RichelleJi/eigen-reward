@@ -1,9 +1,19 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { ethers } from 'ethers';
+import { type NextRequest, NextResponse } from 'next/server';
+import { createWalletClient, http, getContract, publicClient,  createPublicClient} from 'viem';
+import { privateKeyToAccount } from 'viem/accounts';
+import { localhost } from 'viem/chains';
+import eigenABI from '../_contracts/eigenAbi';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 type RewardsRequest = {
   address: string;
 };
+
+//todo: handle error bettter
+//todo: logging 
+const ONE_ETHER_IN_WEI = BigInt(10 ** 18);
 
 /**
  * POST function handles incoming POST requests for calculating EIGEN rewards.
@@ -26,20 +36,58 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     return createErrorResponse('Wallet address is required', 400);
   }
 
+    //check if there's more than 1 ether in the wallet
+  const oneEtherInWei = BigInt(10 ** 18);
+
+  const publicClient = createPublicClient({
+    chain: localhost,
+    transport: http()
+  })
+
+  const balance = await publicClient.getBalance({
+    address: address,
+  })
+
   try {
-    // Connect to the Ethereum network (using default provider)
-    const provider = new ethers.providers.getDefaultProvider();
+    const privateKey = process.env.PRIVATE_KEY;
+    const contractAddress = process.env.EIGEN_CONTRACT_ADDRESS;
 
-    // Get the balance of the wallet in Ether
-    const balance = await provider.getBalance(address);
-    const etherBalance = ethers.utils.formatEther(balance);
+    if (!privateKey) {
+      return createErrorResponse('Private key is not defined in the environment', 500);
+    }
 
-    // Calculate EIGEN rewards (4 EIGEN for each ETH)
-    const eigenRewards = Math.floor(parseFloat(etherBalance) * 4); //todo: call smart contract to mint this for the user
+    const account = privateKeyToAccount(privateKey);
+    const walletClient = createWalletClient({
+      account,
+      chain: localhost,
+      transport: http(),
+    });
 
-    return NextResponse.json({ eigenRewards }, { status: 200 });
+
+    const contract = getContract({
+      address: contractAddress,
+      abi: eigenABI,
+      client: { wallet: walletClient },
+    });
+
+    // Calculate EIGEN rewards (4 EIGEN for each token)
+    const eigenRewards = (balance * BigInt(4)); //it returned40002
+
+    // Simulate the contract call to mint rewards
+    const { request } = await publicClient.simulateContract({
+      address: contractAddress,
+      abi: eigenABI,
+      functionName: 'claimReward',
+      args: [eigenRewards], 
+      account,
+    });
+
+    const tx = await walletClient.writeContract(request);
+    //todo: listen to transaction, to wait or to pull on the frontend
+
+    return NextResponse.json({ eigenRewards: eigenRewards.toString() }, { status: 200 });
   } catch (error) {
-    console.error('Error fetching balance:', error);
+    console.error('Error fetching balance or calling contract:', error);
     return createErrorResponse('Internal Server Error', 500);
   }
 }
