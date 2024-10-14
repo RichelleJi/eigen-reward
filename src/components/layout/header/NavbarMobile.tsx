@@ -71,7 +71,7 @@ export default function NavbarMobile() {
                         'inline-flex h-38 flex-grow flex-col items-start justify-start gap-6',
                         'mt-4 rounded-lg p-6 shadow backdrop-blur-2xl',
                       )}
-                    ></Content>
+                    />
                   </Item>
                 </List>
                 <Viewport className={clsx('flex flex-col justify-center')} />

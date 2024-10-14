@@ -86,7 +86,7 @@ function Navbar() {
                         'inline-flex h-38 w-48 flex-col items-start justify-start gap-6',
                         'rounded-lg bg-neutral-900 p-6 shadow backdrop-blur-2xl',
                       )}
-                    ></Content>
+                    />
                   </Item>
                 </List>
                 <Viewport
