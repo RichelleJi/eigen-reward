@@ -28,6 +28,7 @@ export default function BalanceDisplay() {
   });
 
   useEffect(() => {
+    console.log('eg balance', egBalance);
     if (ethBalanceError) {
       console.error('Error fetching balance:', ethBalanceError);
     }
@@ -46,9 +47,7 @@ export default function BalanceDisplay() {
           <p>Loading balance...</p>
         ) : (
           <p>
-            {' '}
-            ETH:{' '}
-            {ethBalance ? formatUnits(ethBalance.value, 18) : 'Unavailable'}
+            ETH:{ethBalance ? formatUnits(ethBalance.value, 18) : 'Unavailable'}
           </p>
         )}
       </div>
