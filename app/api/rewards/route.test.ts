@@ -2,7 +2,6 @@ import { POST } from './route';
 import type { NextRequest } from 'next/server';
 import { createWalletClient, createPublicClient } from 'viem';
 
-
 jest.mock('viem', () => ({
   createPublicClient: jest.fn(),
   createWalletClient: jest.fn(),
