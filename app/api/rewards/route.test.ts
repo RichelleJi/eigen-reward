@@ -1,5 +1,5 @@
 import { POST } from './route';
-import { NextRequest } from 'next/server';
+import type { NextRequest } from 'next/server';
 import { createWalletClient, createPublicClient } from 'viem';
 
 
@@ -14,7 +14,8 @@ jest.mock('viem', () => ({
 describe('POST route handler', () => {
   const mockBalance = BigInt(2 * 10 ** 18);
   const rewardAddress = '0x1234567890123456789012345678901234567890';
-  const privateKey = '0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80';
+  const privateKey =
+    '0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80';
 
   const mockRequest = (body: any) => ({
     json: jest.fn().mockResolvedValue(body),
@@ -30,8 +31,8 @@ describe('POST route handler', () => {
   };
 
   beforeEach(() => {
-    process.env.PRIVATE_KEY = privateKey;
-    process.env.EIGEN_CONTRACT_ADDRESS = '0xContractAddress';
+    process.env.NEXT_PRIVATE_WAlLLET_PRIVATE_KE = privateKey;
+    process.env.NEXT_PUBLIC_EIGEN_CONTRACT_ADDRESS = '0xContractAddress';
 
     (createWalletClient as jest.Mock).mockReturnValue({
       extend: jest.fn().mockReturnValue(mockWalletClient),
@@ -71,14 +72,18 @@ describe('POST route handler', () => {
     expect(res.status).toBe(400);
     const json = await res.json();
     expect(json.error).toBeDefined();
-    expect(json.error).toContain('Not elgiable for rewards: ETH Balance below requirement');
+    expect(json.error).toContain(
+      'Not elgiable for rewards: ETH Balance below requirement',
+    );
   });
 
   it('returns 200 and sends the transaction if balance is sufficient', async () => {
     const req = mockRequest({ rewardAddress });
     const res = await POST(req as unknown as NextRequest);
 
-    expect(mockPublicClient.getBalance).toHaveBeenCalledWith({ address: rewardAddress });
+    expect(mockPublicClient.getBalance).toHaveBeenCalledWith({
+      address: rewardAddress,
+    });
     expect(mockWalletClient.simulateContract).toHaveBeenCalled();
     expect(mockWalletClient.writeContract).toHaveBeenCalled();
     expect(res.status).toBe(200);
@@ -87,7 +92,9 @@ describe('POST route handler', () => {
   });
 
   it('returns 500 if an error occurs during processing', async () => {
-    mockPublicClient.getBalance.mockRejectedValueOnce(new Error('Balance fetch failed'));
+    mockPublicClient.getBalance.mockRejectedValueOnce(
+      new Error('Balance fetch failed'),
+    );
     const req = mockRequest({ rewardAddress });
     const res = await POST(req as unknown as NextRequest);
 
