@@ -37,10 +37,8 @@ const RewardTransaction = () => {
       {isConnected ? (
         <div>
           <button onClick={handleCalculateRewards}>Calculate Rewards</button>
-          {error && <p style={{color: 'red'}}>{error}</p>}
-          {eigenRewards !== null && (
-            <p>Your EIGEN rewards: {eigenRewards}</p>
-          )}
+          {error && <p style={{ color: 'red' }}>{error}</p>}
+          {eigenRewards !== null && <p>Your EIGEN rewards: {eigenRewards}</p>}
         </div>
       ) : (
         <p>Please connect your wallet to calculate rewards.</p>

@@ -3,9 +3,15 @@ import useOnchainCoffeeMemos from '../_hooks/useOnchainCoffeeMemos';
 import FormBuyCoffee from './FormBuyCoffee';
 import Memos from './Memos';
 import RewardTransaction from './RewardTransaction'; // Import the RewardTransaction component
+import { useAccount, useBalance } from 'wagmi';
 
 export default function RewardPage() {
   const { memos, refetchMemos } = useOnchainCoffeeMemos();
+  const { address, isConnected } = useAccount();
+  const { data: balanceData, isLoading: isLoadingBalance } = useBalance({
+    address: address,
+    watch: true, // Automatically update the balance when it changes
+  });
 
   return (
     <div
@@ -46,6 +52,21 @@ export default function RewardPage() {
           <RewardTransaction />
         </div>
       </aside>
+      <section
+        className={clsx([
+          'mt-10 rounded-lg border border-boat-color-palette-line border-solid',
+          'bg-boat-color-palette-backgroundalternate p-10 md:mt-0',
+        ])}
+      >
+        <h2 className="mb-5 w-fit font-semibold text-2xl text-white">
+          Your Ethereum Balance
+        </h2>
+        {isLoadingBalance ? (
+          <p>Loading balance...</p>
+        ) : (
+          <p>Your balance: {balanceData?.formatted} ETH</p>
+        )}
+      </section>
     </div>
   );
 }

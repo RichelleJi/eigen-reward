@@ -9,7 +9,11 @@ const customJestConfig = {
     '@coinbase/onchainkit/wallet':
       '<rootDir>/node_modules/@coinbase/onchainkit/esm/wallet',
   },
-  roots: ['<rootDir>/src', '<rootDir>/app/api/paymaster-proxy', '<rootDir>/app/api/rewards'],
+  roots: [
+    '<rootDir>/src',
+    '<rootDir>/app/api/paymaster-proxy',
+    '<rootDir>/app/api/rewards',
+  ],
   setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
 };
 const asyncConfig = createJestConfig(customJestConfig);

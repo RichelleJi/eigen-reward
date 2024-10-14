@@ -1,11 +1,10 @@
-import { ChevronDownIcon, GitHubLogoIcon } from '@radix-ui/react-icons';
+import { GitHubLogoIcon } from '@radix-ui/react-icons';
 import '@rainbow-me/rainbowkit/styles.css';
 import {
   Content,
   Item,
   List,
   Root,
-  Trigger,
   Viewport,
 } from '@radix-ui/react-navigation-menu';
 import { clsx } from 'clsx';

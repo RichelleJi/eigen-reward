@@ -1,7 +1,7 @@
 'use client';
 
 import { NavbarLink } from '@/components/layout/header/Navbar';
-import { ArrowTopRightIcon, GitHubLogoIcon } from '@radix-ui/react-icons';
+import { GitHubLogoIcon } from '@radix-ui/react-icons';
 import NextLink from 'next/link';
 import FooterIcon from './FooterIcon';
 

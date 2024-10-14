@@ -1,10 +1,7 @@
 'use client';
-
-import { OnchainKitProvider } from '@coinbase/onchainkit';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import type { ReactNode } from 'react';
 import { WagmiProvider, createConfig, http } from 'wagmi';
-import { baseSepolia } from 'viem/chains';
 import { RainbowKitProvider } from '@rainbow-me/rainbowkit';
 import { mainnet, sepolia, localhost } from 'wagmi/chains';
 import '@coinbase/onchainkit/styles.css';
@@ -27,9 +24,7 @@ function OnchainProviders({ children }: Props) {
     <WagmiProvider config={config}>
       <QueryClientProvider client={queryClient}>
         {/*<OnchainKitProvider chain={localhost}>*/}
-          <RainbowKitProvider modalSize="compact">
-            {children}
-          </RainbowKitProvider>
+        <RainbowKitProvider modalSize="compact">{children}</RainbowKitProvider>
         {/*</OnchainKitProvider>*/}
       </QueryClientProvider>
     </WagmiProvider>
