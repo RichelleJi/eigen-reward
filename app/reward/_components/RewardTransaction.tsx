@@ -33,11 +33,13 @@ const RewardTransaction = () => {
 
   return (
     <div>
-      <h2>Calculate EIGEN Rewards</h2>
+      <h2 className="mb-5 w-fit font-semibold text-2xl text-white">
+        Messages from supporters
+      </h2>
       {isConnected ? (
         <div>
           <button onClick={handleCalculateRewards}>Calculate Rewards</button>
-          {error && <p style={{ color: 'red' }}>{error}</p>}
+          {error && <p style={{color: 'red'}}>{error}</p>}
           {eigenRewards !== null && <p>Your EIGEN rewards: {eigenRewards}</p>}
         </div>
       ) : (

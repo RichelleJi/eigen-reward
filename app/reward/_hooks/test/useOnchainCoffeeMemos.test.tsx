@@ -6,7 +6,6 @@ import { markStep } from '@/utils/analytics';
 import { renderHook } from '@testing-library/react';
 import { useReadContract } from 'wagmi';
 import type { CoffeeMemo } from '../../_components/types';
-import useOnchainCoffeeMemos from '../useOnchainCoffeeMemos';
 
 jest.mock('../utils/analytics', () => ({
   markStep: jest.fn(),
