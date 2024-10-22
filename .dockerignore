@@ -1,0 +1,7 @@
+  node_modules
+  npm-debug.log
+  Dockerfile0
+  docker-compose.yml
+  .git
+  .gitignore
+  contract
